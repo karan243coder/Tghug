@@ -1,0 +1,27 @@
+# Koyeb Configuration for Telegram Bot
+# 512MB RAM optimized
+
+app:
+  name: telegram-image-editor
+  services:
+    - name: bot
+      type: worker
+      instance_type: nano  # 512MB RAM
+      docker:
+        image: .  # Will use Dockerfile from repo
+      env:
+        - name: TELEGRAM_BOT_TOKEN
+          value: "${TELEGRAM_BOT_TOKEN}"
+          secret: true
+        - name: HUGGINGFACE_TOKEN
+          value: "${HUGGINGFACE_TOKEN}"
+          secret: true
+      scaling:
+        min: 1
+        max: 1  # Single instance for free tier
+      ports:
+        - port: 8080
+          protocol: http
+      health_check:
+        port: 8080
+        path: /
